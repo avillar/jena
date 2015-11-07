@@ -74,7 +74,11 @@ public class DatasetGraphWithLock extends DatasetGraphTrackActive implements Syn
 
     @Override
     public boolean isInTransaction() {
-        return inTransaction.get() ;
+        boolean it = inTransaction.get();
+        if (!it) {
+            inTransaction.remove();
+        }
+        return it ;
     }
 
     protected boolean isTransactionType(ReadWrite readWriteType) {
@@ -127,8 +131,8 @@ public class DatasetGraphWithLock extends DatasetGraphTrackActive implements Syn
     }
     
     private void clearState() {
-        inTransaction.set(false) ;
-        readWrite.set(null) ;
+        inTransaction.remove() ;
+        readWrite.remove();
     }
 
     @Override

@@ -135,7 +135,11 @@ public class DatasetGraphTransaction extends DatasetGraphTrackActive implements 
     public boolean isInTransaction()    
     { 
         checkNotClosed() ;
-        return inTransaction.get() ;
+        boolean it = inTransaction.get();
+        if (!it) {
+            inTransaction.remove();
+        }
+        return it ;
     }
 
     public boolean isClosed()
@@ -162,7 +166,7 @@ public class DatasetGraphTransaction extends DatasetGraphTrackActive implements 
     {
         checkNotClosed() ;
         txn.get().commit() ;
-        inTransaction.set(false) ;
+        inTransaction.remove() ;
     }
 
     @Override
@@ -170,7 +174,7 @@ public class DatasetGraphTransaction extends DatasetGraphTrackActive implements 
     {
         checkNotClosed() ;
         txn.get().abort() ;
-        inTransaction.set(false) ;
+        inTransaction.remove(); ;
     }
 
     @Override
@@ -186,8 +190,8 @@ public class DatasetGraphTransaction extends DatasetGraphTrackActive implements 
         }
         txn.get().end() ;
         // May already be false due to .commit/.abort.
-        inTransaction.set(false) ;
-        txn.set(null) ;
+        inTransaction.remove();
+        txn.remove();
     }
 
     @Override
