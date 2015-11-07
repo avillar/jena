@@ -195,18 +195,6 @@ public class DatasetGraphTransaction extends DatasetGraphTrackActive implements 
     }
 
     @Override
-    public String toString()
-    {
-        try {
-            if ( isInTransaction() )
-                // Risky ... 
-                return get().toString() ;
-            // Hence ...
-            return getBaseDatasetGraph().toString() ;
-        } catch (Throwable th) { return "DatasetGraphTransaction" ; }
-    }
-    
-    @Override
     protected void _close()
     {
         if ( isClosed )
